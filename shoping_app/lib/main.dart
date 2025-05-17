@@ -17,10 +17,18 @@ class MyApp extends StatelessWidget {
         fontFamily: "Lato",
         colorScheme: ColorScheme.fromSeed(
           seedColor: Color.fromRGBO(254, 206, 1, 1),
+          primary: Color.fromRGBO(254, 206, 1, 1),
         ),
         inputDecorationTheme: const InputDecorationTheme(
           hintStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           prefixIconColor: Color.fromRGBO(199, 199, 199, 1),
+        ),
+        textTheme: TextTheme(
+          titleMedium: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+          bodySmall: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
       ),
     );

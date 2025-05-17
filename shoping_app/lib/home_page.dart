@@ -1,7 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:shoping_app/global_variables.dart';
+import 'package:shoping_app/product_card.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final List<String> companies = const ['All', "Addidas", "Nike", "Boat"];
+  late String selectedCompany;
+  @override
+  void initState() {
+    super.initState();
+    selectedCompany = companies[0];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -9,11 +24,11 @@ class HomePage extends StatelessWidget {
       borderSide: BorderSide(color: Color.fromRGBO(225, 225, 225, 1)),
       borderRadius: BorderRadius.horizontal(left: Radius.circular(30)),
     );
-    return const Scaffold(
+    return Scaffold(
       body: SafeArea(
         child: Column(
           children: [
-            Row(
+            const Row(
               children: [
                 Padding(
                   padding: EdgeInsets.all(20.0),
@@ -34,6 +49,61 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
               ],
+            ),
+            SizedBox(
+              height: 120,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: companies.length,
+                itemBuilder: (context, index) {
+                  final company = companies[index];
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selectedCompany = company;
+                        });
+                      },
+                      child: Chip(
+                        backgroundColor:
+                            selectedCompany == company
+                                ? Theme.of(context).colorScheme.primary
+                                : Color.fromRGBO(245, 247, 249, 1),
+                        side: const BorderSide(
+                          color: Color.fromRGBO(245, 247, 249, 1),
+                        ),
+                        label: Text(company),
+                        labelStyle: const TextStyle(fontSize: 16),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 15,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: products.length,
+                itemBuilder: (context, index) {
+                  final product = products[index];
+                  return ProductCard(
+                    title: product['title'] as String,
+                    price: product['price'] as double,
+                    imageUrl: product['imageUrl'] as String,
+                    backgroundColor:
+                        index.isEven
+                            ? const Color.fromRGBO(216, 240, 253, 1)
+                            : Color.fromRGBO(245, 247, 249, 1),
+                  );
+                },
+              ),
             ),
           ],
         ),
