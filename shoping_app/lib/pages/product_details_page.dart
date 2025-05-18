@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shoping_app/providers/cart_provider.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   final Map<String, Object> product;
@@ -17,6 +19,42 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     selectedSize = 0;
   }
 
+  void onTap() {
+    if (selectedSize != 0) {
+      Provider.of<CartProvider>(context, listen: false).addToCart({
+        'id': widget.product['id'],
+        'title': widget.product['title'],
+        'price': widget.product['price'],
+        'imageUrl': widget.product['imageUrl'],
+        'company': widget.product['company'],
+        'size': selectedSize,
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          duration: Duration(milliseconds: 500),
+          content: Center(
+            child: Text(
+              "Product added to cart",
+              style: TextStyle(color: Colors.green),
+            ),
+          ),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          duration: Duration(milliseconds: 500),
+          content: Center(
+            child: Text(
+              "Please select a size",
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +70,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             padding: const EdgeInsets.all(16.0),
             child: Image.asset(
               widget.product["imageUrl"] as String,
-              height: 300,
+              height: 250,
             ),
           ),
           const Spacer(flex: 2),
@@ -81,12 +119,12 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                   padding: const EdgeInsets.all(20.0),
                   child: ElevatedButton.icon(
                     icon: const Icon(Icons.add_shopping_cart),
-                    onPressed: () {},
+                    onPressed: onTap,
 
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.primary,
                       foregroundColor: Colors.black,
-                      minimumSize: const Size(double.infinity, 50),
+                      fixedSize: const Size(350, 50),
                     ),
                     label: Text('Add to cart', style: TextStyle(fontSize: 18)),
                   ),
